@@ -1,0 +1,81 @@
+---
+// Doc: https://developers.google.com/identity/gsi/web/reference/html-reference?hl=es-419
+
+export interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+
+declare global {
+  interface Window {
+    handleCredentialResponse: (response: any) => void;
+  }
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<script src="https://accounts.google.com/gsi/client" async defer></script>
+	</head>
+	<body>
+    <h1>Google OAuth2: <span class="text-gradient">Popup</span></h1>
+		<slot />
+		<div class="g_id_signin" data-type="standard"></div>
+		<script>
+			import * as jose from 'jose';
+			import confetti from 'canvas-confetti';
+
+			window.handleCredentialResponse = (response) => {
+				console.log('EUREKA!!', response);
+				const responsePayload = jose.decodeJwt(response.credential);
+
+				console.log('responsePayload', responsePayload);
+
+				console.log("ID: " + responsePayload.sub);
+				console.log('Full Name: ' + responsePayload.name);
+				console.log('Given Name: ' + responsePayload.given_name);
+				console.log('Family Name: ' + responsePayload.family_name);
+				console.log("Image URL: " + responsePayload.picture);
+				console.log("Email: " + responsePayload.email);
+				confetti();
+			}
+		</script>
+		<div id="g_id_onload"
+				data-client_id="449635876911-59ssjpabb91r50jmbv310ta9k9up56ko.apps.googleusercontent.com"
+				data-login_uri="http://localhost:3000"
+				data-ux_mode="popup"
+				
+				data-auto_select="true"
+				data-callback="handleCredentialResponse">
+		</div>
+		<div class="g_id_signout">Sign Out</div>
+	</body>
+</html>
+<style is:global>
+	:root {
+		--accent: 124, 58, 237;
+		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
+	}
+	html {
+		font-family: system-ui, sans-serif;
+		background-color: #F6F6F6;
+	}
+	code {
+		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+			Bitstream Vera Sans Mono, Courier New, monospace;
+	}
+  .text-gradient {
+		background-image: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+</style>

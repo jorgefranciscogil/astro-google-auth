@@ -1,0 +1,19 @@
+{
+	"name": "google-oauth",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "astro dev",
+		"start": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro"
+	},
+	"dependencies": {
+		"@types/canvas-confetti": "^1.6.0",
+		"@types/google.accounts": "^0.0.6",
+		"astro": "^2.0.10",
+		"canvas-confetti": "^1.6.0",
+		"jose": "^4.11.4"
+	}
+}
