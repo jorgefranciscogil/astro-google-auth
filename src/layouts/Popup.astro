@@ -10,6 +10,7 @@ const { title } = Astro.props;
 declare global {
   interface Window {
     handleCredentialResponse: (response: any) => void;
+    signout: () => void;
   }
 }
 ---
@@ -31,21 +32,42 @@ declare global {
 		<script>
 			import * as jose from 'jose';
 			import confetti from 'canvas-confetti';
+      (() => {
+        let signin = false;
 
-			window.handleCredentialResponse = (response) => {
-				console.log('EUREKA!!', response);
-				const responsePayload = jose.decodeJwt(response.credential);
+        /* google.accounts.id.prompt((notification) => {
+          if (notification.isNotDisplayed()) {
+            console.log('getNotDisplayedReason -->>>', notification.getNotDisplayedReason())
+          } else if (notification.isSkippedMoment()) {
+            console.log('getSkippedReason -->>>', notification.getSkippedReason())
+          } else if(notification.isDismissedMoment()) {
+            console.log('getDismissedReason -->>>', notification.getDismissedReason())
+          }
+          // continue with another identity provider.
+        }); */
 
-				console.log('responsePayload', responsePayload);
+        window.handleCredentialResponse = (response) => {
+          console.log('EUREKA!!', response);
+          const payload = jose.decodeJwt(response.credential);
 
-				console.log("ID: " + responsePayload.sub);
-				console.log('Full Name: ' + responsePayload.name);
-				console.log('Given Name: ' + responsePayload.given_name);
-				console.log('Family Name: ' + responsePayload.family_name);
-				console.log("Image URL: " + responsePayload.picture);
-				console.log("Email: " + responsePayload.email);
-				confetti();
-			}
+          console.log('payload', payload);
+
+          console.log("ID: " + payload.sub);
+          console.log('Full Name: ' + payload.name);
+          console.log('Given Name: ' + payload.given_name);
+          console.log('Family Name: ' + payload.family_name);
+          console.log("Image URL: " + payload.picture);
+          console.log("Email: " + payload.email);
+          if (payload.email && payload.email_verified) {
+            signin = true;
+          }
+          confetti();
+        }
+
+        window.signout = () => {
+          window.location.reload();
+        }
+      })();
 		</script>
 		<div id="g_id_onload"
 				data-client_id="449635876911-59ssjpabb91r50jmbv310ta9k9up56ko.apps.googleusercontent.com"
@@ -55,7 +77,7 @@ declare global {
 				data-auto_select="true"
 				data-callback="handleCredentialResponse">
 		</div>
-		<div class="g_id_signout">Sign Out</div>
+		<div class="g_id_signout" onclick="signout()">Sign Out</div>
 	</body>
 </html>
 <style is:global>

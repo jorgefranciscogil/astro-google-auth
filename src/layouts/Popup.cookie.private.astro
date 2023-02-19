@@ -9,11 +9,10 @@ const { title } = Astro.props;
 
 declare global {
   interface Window {
-    handleCredentialResponse: (response: any) => void;
-    initTokenClient: () => void;
-    getToken: () => void;
+    signout: () => void;
   }
 }
+
 ---
 
 <!DOCTYPE html>
@@ -26,42 +25,19 @@ declare global {
     <title>{title}</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
-  <body onload="initTokenClient()">
-    <h1>Google OAuth2: <span class="text-gradient">Get Access Token</span></h1>
-    <div>
-      <button onclick="getToken();">Get access token</button>
-    </div>
-    
+  <body>
+    <h1>Jorge Francisco Gil <span class="text-gradient">Portfolio</span></h1>
+    <div class="g_id_signout" onclick="signout()">Sign Out</div>
     <slot />
+    <!-- <div class="g_id_signin" data-type="standard"></div> -->
     <script>
       import confetti from 'canvas-confetti';
-
-      let tokenClient;
-      let gisInited = false;
-
-      const CLIENT_ID = "449635876911-59ssjpabb91r50jmbv310ta9k9up56ko.apps.googleusercontent.com";
-      // Authorization scopes required by the API; multiple scopes can be
-      // included, separated by spaces.
-      const SCOPES = 'https://www.googleapis.com/auth/contacts.readonly';
-
-      window.initTokenClient = () => {
-        tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: CLIENT_ID,
-            scope: SCOPES,
-            prompt: '',
-            callback: (tokenResponse) => {
-              console.log('tokenResponse.access_token');
-              console.log(tokenResponse.access_token);
-              confetti();
-            },
-        });
-        console.log('tokenClient', tokenClient);
-        gisInited = true;
-      }
-
-      window.getToken = () => {
-        tokenClient.requestAccessToken();
-      }
+      (() => {
+        window.signout = () => {
+          window.location.reload();
+        }
+        confetti();
+      })();
     </script>
   </body>
 </html>
