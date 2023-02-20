@@ -105,3 +105,6 @@ dist
 
 #Custom
 package-lock.json
+
+# Local Netlify folder
+.netlify
