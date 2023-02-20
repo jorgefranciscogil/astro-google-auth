@@ -10,10 +10,10 @@
 		"astro": "astro"
 	},
 	"dependencies": {
-		"@astrojs/netlify": "^2.1.2",
 		"@types/canvas-confetti": "^1.6.0",
 		"@types/google.accounts": "^0.0.6",
 		"astro": "^2.0.10",
+		"@astrojs/vercel": "^3.1.2",
 		"canvas-confetti": "^1.6.0",
 		"jose": "^4.11.4"
 	}
