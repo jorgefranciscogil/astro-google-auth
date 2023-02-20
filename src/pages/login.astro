@@ -3,13 +3,11 @@ import Layout from '../layouts/Popup.cookie.public.astro';
 
 // Requires Server Side Rendering (SSR): https://docs.astro.build/en/guides/server-side-rendering/
 const cookie = Astro.cookies.get('g_state');
-const g_state = JSON.parse(cookie.value || '{i_t:true}');
-
-console.log("g_state", g_state);
+/* const g_state = JSON.parse(cookie.value || '{i_t:true}');
 
 if (!g_state?.i_t) {
   return Astro.redirect('/');
-}
+} */
 ---
 
 <Layout title="Welcome to Astro | Public">
