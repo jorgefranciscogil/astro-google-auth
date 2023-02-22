@@ -26,11 +26,12 @@ declare global {
   </head>
   <body>
     <h1>Jorge Francisco Gil - <span class="text-gradient">Portfolio</span></h1>
+    <h2>Welcome</h2>
     <slot />
     <div class="g_id_signin" data-type="standard"></div>
     <script>
       import * as jose from 'jose';
-      
+
       (() => {
         window.handleCredentialResponse = (response) => {
           const payload = jose.decodeJwt(response.credential);
