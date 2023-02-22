@@ -25,18 +25,17 @@ declare global {
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
   <body>
-    <h1>Jorge Francisco Gil <span class="text-gradient">Portfolio</span></h1>
+    <h1>Jorge Francisco Gil - <span class="text-gradient">Portfolio</span></h1>
     <slot />
     <div class="g_id_signin" data-type="standard"></div>
     <script>
       import * as jose from 'jose';
-      import confetti from 'canvas-confetti';
+      
       (() => {
         window.handleCredentialResponse = (response) => {
           const payload = jose.decodeJwt(response.credential);
           console.log('payload', payload);
           if (payload.email && payload.email_verified) {
-            confetti();
             window.location.href = "/";
           } 
         }
